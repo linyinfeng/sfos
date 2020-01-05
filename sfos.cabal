@@ -1,0 +1,62 @@
+cabal-version:       2.4
+
+name:                sfos
+version:             0.1.0.0
+synopsis:            System F omega with subtyping.
+description:         Simple implementation of system F omega with subtyping.
+homepage:            https://github.com/linyinfeng/sfos#readme
+bug-reports:         https://github.com/linyinfeng/sfos/issues
+license:             MIT
+license-file:        LICENSE
+author:              Lin Yinfeng
+maintainer:          lin.yinfeng@outlook.com
+copyright:           (c) 2019 Lin Yinfeng
+category:            Language
+build-type:          Simple
+stability:           alpha
+extra-source-files:  README.md
+
+common haskell
+  default-language: Haskell2010
+  ghc-options:
+    -Wall
+
+common dependencies
+  build-depends:
+      base
+    , optparse-applicative
+    , trifecta
+    , parsers
+    , unordered-containers
+    , utf8-string
+    , ansi-terminal
+    , show-prettyprint
+
+common executable-flags
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+
+library
+  import:
+      haskell
+    , dependencies
+  hs-source-dirs: src
+  exposed-modules:
+      Sfos
+    , Sfos.Syntax
+    , Sfos.Support
+    , Sfos.Show
+    , Sfos.Parser
+    , Sfos.Error
+    , Sfos.Evaluation
+    , Sfos.Typing
+    , Sfos.Kinding
+
+executable sfos-repl
+  import:
+      haskell
+    , dependencies
+    , executable-flags
+  hs-source-dirs: repl
+  main-is:        Main.hs
+  build-depends:
+    sfos

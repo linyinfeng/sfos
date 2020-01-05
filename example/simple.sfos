@@ -1,0 +1,25 @@
+let Id = ∀X<:Top. X -> X in
+let id = λX<:Top. λx:X. x in
+
+let Const = ∀X<:Top. X -> (∀Y<:Top. Y -> X) in
+let const = λX<:Top. λx: X. λY<:Top. λy: Y. x in
+
+let Bool = ∀X<:Top. X -> X -> X in
+let fls = λX<:Top. λt:X. λf:X. f in
+let tru = λX<:Top. λt:X. λf:X. t in
+let not = λx:Bool. x [Bool] fls tru in
+
+let Nat = ∀X<:Top. (X -> X) -> X -> X in
+let zero = λX<:Top. λs:X -> X. λz:X. z in
+let succ = λn:Nat. λX<:Top. λs:X -> X. λz:X. s (n [X] s z) in
+let isZero = λn:Nat. n [Bool] ((const [Bool] fls) [Bool]) tru in
+
+let Pair = λX :: *. λY :: *. ∀R<:Top. (X -> Y -> R) -> R in
+let pair = λX<:Top. λY<:Top. λx:X. λy:Y.
+  λR<:Top. λf:X -> Y -> R. f x y in
+let pairFst = λX<:Top. λY<:Top. λp: Pair X Y.
+  p [X] (λx:X. λy:Y. x) in
+let pairSnd = λX<:Top. λY<:Top. λp: Pair X Y.
+  p [Y] (λx:X. λy:Y. y) in
+
+isZero ((pairSnd [Bool] [Nat]) (pair [Bool] [Nat] fls (succ zero)))
